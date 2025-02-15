@@ -1,4 +1,5 @@
 import os
+import json
 from functools import cached_property
 from operator import itemgetter
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -147,10 +148,11 @@ class LocalChatCompletion(LocalCompletionsAPI):
         if not isinstance(stop, (list, tuple)):
             stop = [stop]
         return {
+            "top_p": 0.95,
             "messages": messages,
             "model": self.model,
-            "max_tokens": max_tokens,
-            "temperature": temperature,
+            "max_tokens": 8192,
+            "temperature": 0.6,
             "stop": stop[:4],
             "seed": seed,
             **gen_kwargs,
@@ -162,9 +164,10 @@ class LocalChatCompletion(LocalCompletionsAPI):
         if not isinstance(outputs, list):
             outputs = [outputs]
         for out in outputs:
+            usage = out.get("usage", None)
             tmp = [None] * len(out["choices"])
             for choices in out["choices"]:
-                tmp[choices["index"]] = choices["message"]["content"]
+                tmp[choices["index"]] = choices["message"]["content"] + "||||" + json.dumps(usage)
             res = res + tmp
         return res
 

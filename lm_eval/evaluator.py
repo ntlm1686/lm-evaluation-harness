@@ -205,7 +205,7 @@ def simple_evaluate(
             lm = lm_eval.api.registry.get_model(model).create_from_arg_string(
                 model_args,
                 {
-                    "batch_size": batch_size,
+                    # "batch_size": batch_size,
                     "max_batch_size": max_batch_size,
                     "device": device,
                 },
@@ -410,7 +410,6 @@ def evaluate(
     :return
         Dictionary of results
     """
-
     eval_logger.setLevel(getattr(logging, f"{verbosity}"))
 
     if apply_chat_template:
@@ -521,6 +520,7 @@ def evaluate(
                 cloned_reqs.extend([req] * req.repeats)
 
         # run requests through model
+        # TODO TODO TODO
         resps = getattr(lm, reqtype)(cloned_reqs)
 
         # put responses from model into a list of length K for each request.

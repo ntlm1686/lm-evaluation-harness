@@ -420,6 +420,8 @@ class TemplateAPI(TemplateLM):
                 # raising exception will retry the request
                 response.raise_for_status()
                 outputs = await response.json()
+            #### TODO TODO TODO
+            # usage = outputs.get("usage", None)
             answers = (
                 self.parse_generations(
                     outputs=outputs,
@@ -431,6 +433,7 @@ class TemplateAPI(TemplateLM):
                     ctxlens=ctxlens,
                 )
             )
+            # TODO TODO TODO
             if cache_keys:
                 for res, cache in zip(answers, cache_keys):
                     self.cache_hook.add_partial(cache_method, cache, res)
@@ -629,6 +632,7 @@ class TemplateAPI(TemplateLM):
                     generate=True,
                     gen_kwargs=copy.deepcopy(all_gen_kwargs[0]),
                 )
+                # TODO
                 for generated_text, context in zip(
                     self.parse_generations(
                         outputs=outputs,
@@ -669,6 +673,7 @@ class TemplateAPI(TemplateLM):
                         "Tokenized requests are disabled. Context + generation length is not checked."
                     )
                 req = encodings_list if self.tokenized_requests else contexts
+
                 results = itertools.chain.from_iterable(
                     asyncio.run(
                         self.get_batched_requests(
